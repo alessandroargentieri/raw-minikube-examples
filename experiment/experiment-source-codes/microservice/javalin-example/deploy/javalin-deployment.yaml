@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service              
+metadata:
+  name: javalin-lb
+spec:
+  type: LoadBalancer       
+  ports:
+  - port: 80             
+    targetPort: 7000        
+  selector:            
+    app: javalin    
+---
+apiVersion: apps/v1 #apps/v1beta2 #extensions/v1beta2 #extensions/v1beta1
+kind: Deployment
+metadata:
+  name: javalin
+  labels:
+    app: javalin
+spec:
+  replicas: 1                                             
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate                                   
+    rollingUpdate: 
+      maxUnavailable: 1                                   
+      maxSurge: 1                                         
+  selector:
+    matchLabels:
+      app: javalin
+      tier: javalin-example
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: javalin
+        tier: javalin-example
+    spec:
+      containers:
+      - image: alessandroargentieri/javalin-example
+        name: javalin
+        ports:
+        - containerPort: 7000
+          name: javalin

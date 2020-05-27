@@ -1,0 +1,58 @@
+
+Una volta messo su K8s cambiare l'APP Github perche' il redirectUrl non corrisponde piu'
+
+~~~~~ GATEWAY (base port: 4000) ~~~~~~~~~~~~~~~~~~~~~
+
+path of Project: ~/work/alexapps/javalin-gateway
+
+ENCRYPTION_PASSPHRASE
+JWT_SECRET_KEY
+SERVICE_REGISTRY_SECRET
+OAUTH2_CLIENT_SECRET ("6dad129bc14cca40ec61949a9ed20a0bbbff3136")
+OAUTH2_ACCESS_TOKEN_URL ("https://github.com/login/oauth/access_token")
+OAUTH2_PROVIDER_URL ("https://api.github.com")
+
+
+curl -X POST 'http://localhost:4000/javalin-api-gateway/services/register' -H 'Content-Type:application/json; charset:utf-8' -H "Authorization: default" -d '{"code":"javalin-api","hostUrl":"http://localhost:7000"}'
+
+~~~~~ FRONTEND (base port: 8080) ~~~~~~~~~~~~~~~~~~~~
+andare su localhost:8080/home
+
+path of Project: ~/work/alexapps/thymeleaf/frontend
+
+
+server.port = 8080
+
+clientId = ${OAUTH2_CLIENT_ID:6b75ee8f443a8ebbb38c}
+frontendHost = ${FRONTEND_HOST:http://localhost:8080}
+loginRedirectPath = ${LOGIN_REDIRECT_PATH:login/oauth2/code/github}
+redirectUrl = ${frontendHost}/${loginRedirectPath}
+state = ${OAUTH2_STATE:fknrrdyjikfn}
+scope = ${OAUTH2_SCOPE:user}
+
+gatewayHost = ${GATEWAY_HOST:http://localhost:4000}
+gatewayRootPath = ${GATEWAY_ROOT_PATH:javalin-api-gateway}
+gatewayUrl = ${gatewayHost}/${gatewayRootPath}
+gatewayLoginUrl = ${gatewayUrl}/login
+securedCallUrl = ${gatewayUrl}/javalin-api/you
+
+resourceProviderUrl = ${OAUTH2_RESOURCE_PROVIDER_URL:https://github.com/login/oauth/authorize}
+temporaryCodeUrl = ${resourceProviderUrl}?client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${scope}&state=${state}&allow_signup=true
+
+
+
+~~~~~~ MICROSERVICE (base port 7000) ~~~~~~~
+
+
+path of Project: ~/work/alexapps/javalin-example
+
+
+~~~~~~~~~~~~~~~~~~
+
+
+ ORIGINAL SERVICE CALL
+ curl -X POST 'http://localhost:7000/javalin-api/you' -H 'Content-Type:application/json; charset:utf-8' -d '{"title":"mr.","name":"alessandro","surname":"argentieri"}'
+
+ API GATEWAY TO REVERSE PROXY TO THE SERVICE
+ curl -X POST 'http://localhost:4000/javalin-api-gateway/javalin-api/you' -H 'Content-Type:application/json; charset:utf-8' -d '{"title":"mr.","name":"alessandro","surname":"argentieri"}'
+
