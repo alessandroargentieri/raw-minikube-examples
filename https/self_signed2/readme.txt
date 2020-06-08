@@ -8,8 +8,8 @@ kubectl get pods -n kube-system
 2. deployare i due deployment ed esporli come servizi:
 kubectl create deployment web1 --image=gcr.io/google-samples/hello-app:1.0
 kubectl create deployment web2 --image=gcr.io/google-samples/hello-app:2.0
-kubectl expose deployment web1 --type=ClusterIP --port=80 --targetPort=8080
-kubectl expose deployment web2 --type=ClusterIP --port=80 --targetPort=8080
+kubectl expose deployment web1 --type=ClusterIP --port=80 --target-port=8080
+kubectl expose deployment web2 --type=ClusterIP --port=80 --target-port=8080
 
 ~~~~~~~~~~~~~~~~~
 3. creare un self signed certificate
