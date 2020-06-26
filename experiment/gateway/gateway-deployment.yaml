@@ -45,7 +45,15 @@ spec:
         - name: OAUTH2_ACCESS_TOKEN_URL
           value: "https://github.com/login/oauth/access_token"
         - name: OAUTH2_PROVIDER_URL
-          value: "https://api.github.com"  
+          value: "https://api.github.com"
+        - name: ENCRYPTION_PASSPHRASE
+          value: "gTrvB78hfjkhg"
+        - name: JWT_SECRET_KEY
+          value: "hGyhjjg65fh6g"
+        - name: SERVICE_NAME_1
+          value: "javalin-api"
+        - name: SERVICE_HOST_1
+          value: "http://microservice-lb"  
         ports:
         - containerPort: 4000
           name: gateway
